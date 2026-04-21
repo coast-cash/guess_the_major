@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <title>Golf Guessr</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <span class="header-flag">⛳</span>
+    <div class="header-text">
+      <h1>Golf Guessr</h1>
+      <p>Guess the Major champion</p>
+    </div>
+  </header>
+
+  <main class="scroll-area">
+
+    <!-- Tournament card -->
+    <div class="tournament-card">
+      <div class="round-indicator" id="round-indicator">Round 1 · Thursday</div>
+      <div class="tournament-title" id="tournament-display">—</div>
+      <div class="hints" id="hints-area"></div>
+    </div>
+
+    <!-- Scorecard -->
+    <div class="scorecard-section">
+      <div class="scorecard-header">
+        <span class="sc-rd">RD</span>
+        <span class="sc-day">DAY</span>
+        <span class="sc-player">PLAYER</span>
+        <span class="sc-icon"></span>
+      </div>
+      <div id="scorecard" style="perspective: 600px;"></div>
+    </div>
+
+    <!-- Result card -->
+    <div id="result-card" class="result-card hidden">
+      <div id="result-status" class="result-status"></div>
+      <div class="winner-info">
+        <img id="winner-img" src="" alt="Winner" class="winner-img hidden" />
+        <div id="winner-name" class="winner-name"></div>
+        <div id="winner-meta" class="winner-meta"></div>
+      </div>
+      <div class="result-buttons">
+        <button id="share-btn" class="btn btn-gold">Share Result</button>
+        <button id="next-btn" class="btn btn-green">Next Tournament →</button>
+      </div>
+    </div>
+
+    <div class="scroll-spacer"></div>
+  </main>
+
+  <!-- Sticky input dock -->
+  <div class="input-dock" id="input-area">
+    <div id="feedback" class="feedback hidden"></div>
+    <div class="input-row">
+      <div class="autocomplete-wrapper">
+        <ul id="autocomplete-list" class="autocomplete-list hidden"></ul>
+        <input
+          type="text"
+          id="guess-input"
+          placeholder="Type a player's name…"
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="words"
+          spellcheck="false"
+        />
+      </div>
+      <button id="submit-btn" class="btn btn-green">GUESS</button>
+    </div>
+  </div>
+
+  <div id="share-toast" class="share-toast hidden">Copied to clipboard!</div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

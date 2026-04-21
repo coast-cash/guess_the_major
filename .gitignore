@@ -1,0 +1,5 @@
+# Excel temp files
+~$*
+
+# Keep data.json out since data.js already has everything embedded
+data.json
