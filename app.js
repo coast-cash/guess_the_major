@@ -129,19 +129,17 @@ function hideFeedback() {
   feedback.classList.add('hidden');
 }
 
-// ── Wikipedia image ───────────────────────────────────────
+// ── Local player images ───────────────────────────────────
 
-async function fetchWikipediaImage(name) {
-  try {
-    const res = await fetch(
-      `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(name)}`
-    );
-    if (!res.ok) return null;
-    const data = await res.json();
-    return data.thumbnail?.source ?? null;
-  } catch {
-    return null;
-  }
+function playerImageSrc(name) {
+  // "J.H. Taylor" → "j_h_taylor.png", "Mark O'Meara" → "mark_o_meara.png"
+  const file = name
+    .toLowerCase()
+    .replace(/[.']/g, '_')   // dots and apostrophes become underscores
+    .replace(/\s+/g, '_')    // spaces become underscores
+    .replace(/_+/g, '_')     // collapse consecutive underscores
+    .replace(/_$/, '');      // strip trailing underscore
+  return `golfers/${file}.png`;
 }
 
 function showPlaceholderAvatar() {
@@ -156,7 +154,7 @@ function showPlaceholderAvatar() {
 
 // ── Result ────────────────────────────────────────────────
 
-async function showResult(won) {
+function showResult(won) {
   hideFeedback();
   resultCard.classList.remove('hidden');
 
@@ -174,14 +172,10 @@ async function showResult(won) {
   winnerName.textContent = current.winner;
   winnerMeta.textContent = `${current.course} · ${current.country}`;
 
-  const imgSrc = await fetchWikipediaImage(current.winner);
-  if (imgSrc) {
-    winnerImg.src = imgSrc;
-    winnerImg.alt = current.winner;
-    winnerImg.classList.remove('hidden');
-  } else {
-    showPlaceholderAvatar();
-  }
+  winnerImg.src = playerImageSrc(current.winner);
+  winnerImg.alt = current.winner;
+  winnerImg.onload  = () => winnerImg.classList.remove('hidden');
+  winnerImg.onerror = () => { winnerImg.classList.add('hidden'); showPlaceholderAvatar(); };
 
   // Share text — emoji grid from scorecard
   const dots = guessHistory.map(e => e.correct ? '🟢' : '🔴');
@@ -209,6 +203,8 @@ function startGame() {
 
   const placeholder = document.querySelector('.winner-img-placeholder');
   if (placeholder) placeholder.remove();
+  winnerImg.onload  = null;
+  winnerImg.onerror = null;
   winnerImg.src = '';
   winnerImg.classList.add('hidden');
 
